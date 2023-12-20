@@ -1,5 +1,8 @@
 -r requirements.txt
 
+# pdf2image 
+pdf2image
+
 # GCP
 google-cloud-vision
 
