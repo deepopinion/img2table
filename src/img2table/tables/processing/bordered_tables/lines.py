@@ -73,6 +73,8 @@ def filter_lines(img: np.ndarray, char_length: Optional[float]) -> np.ndarray:
     for c in cnts:
         cv2.drawContours(img_cnt, [c], -1, (255,255,255), 3)
 
+    cv2.imwrite("img_cnt.png", img_cnt)
+
     return img
 
 def dilate_dotted_lines(thresh: np.ndarray, char_length: float, contours: List[Cell]) -> np.ndarray:

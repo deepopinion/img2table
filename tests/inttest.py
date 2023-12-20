@@ -23,7 +23,9 @@ if not os.environ.get("GOOGLE_APPLICATION_CREDENTIALS"):
 #
 # Configure path to test cases
 #
-src = "./examples/data/TestCases.pdf"
+# src = "./examples/data/TestCases.pdf"
+# src = "./examples/data/TestCases_1.pdf"
+src = "../table_ocr_test/EggerTable.pdf"
 
 
 #
@@ -34,7 +36,8 @@ scanner = GoogleOCR()
 bboxes = [scanner.ocr(img) for img in imgs]
 ocr = OCRWrapper()
 
-for page, img in enumerate(imgs[:1]):
+tables = []
+for page, img in enumerate(imgs):
     img_bytes = io.BytesIO()
     img.save(img_bytes, format=img.format)
     img_bytes = img_bytes.getvalue()
@@ -42,12 +45,16 @@ for page, img in enumerate(imgs[:1]):
     doc = Image(img_bytes, bboxes=bboxes[page] if bboxes else None)
     extracted_tables = doc.extract_tables(
         ocr=ocr,
-        borderless_tables=False,
-        implicit_rows=True,
-        min_confidence=50,)
+        borderless_tables=True,
+        implicit_rows=False,
+        min_confidence=50,
+        detect_borderless_headers=False, # Setting this to true should enable detection of TestCase 7
+    )
+    tables.extend(extracted_tables)
 
-    print(f"Detected {len(extracted_tables)} tables on page {page+1}.")
-    for table in extracted_tables:
-        print("\n\n")
-        print("TITLE: " + str(table.title))
-        print(table.df)
+
+print(f"Detected {len(tables)} tables.")
+for table in tables:
+    print("\n\n")
+    print("TITLE: " + str(table.title))
+    print(table.df)

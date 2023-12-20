@@ -31,17 +31,21 @@ class Image(Document):
             return [img]
 
     def extract_tables(self, ocr: "OCRInstance" = None, implicit_rows: bool = False, borderless_tables: bool = False,
-                       min_confidence: int = 50) -> List[ExtractedTable]:
+                       min_confidence: int = 50, detect_borderless_headers:bool = False) -> List[ExtractedTable]:
         """
         Extract tables from document
         :param ocr: OCRInstance object used to extract table content
         :param implicit_rows: boolean indicating if implicit rows are splitted
         :param borderless_tables: boolean indicating if borderless tables should be detected
         :param min_confidence: minimum confidence level from OCR in order to process text, from 0 (worst) to 99 (best)
+        :param detect_borderless_headers: boolean indicating if borderless headers should be detected
         :return: list of extracted tables
         """
-        extracted_tables = super(Image, self).extract_tables(ocr=ocr,
-                                                             implicit_rows=implicit_rows,
-                                                             borderless_tables=borderless_tables,
-                                                             min_confidence=min_confidence)
+        extracted_tables = super(Image, self).extract_tables(
+            ocr=ocr,
+            implicit_rows=implicit_rows,
+            borderless_tables=borderless_tables,
+            min_confidence=min_confidence,
+            detect_borderless_headers=detect_borderless_headers,
+        )
         return extracted_tables.get(0)
