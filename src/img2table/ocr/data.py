@@ -81,7 +81,7 @@ class OCRDataframe:
                       .to_list()
                       )
 
-        return "\n".join([" ".join(line).strip() for line in text_lines]).strip() or None
+        return " ".join([" ".join(line).strip() for line in text_lines]).strip() or None
 
     def get_text_table(self, table: Table, page_number: int = None, min_confidence: int = 50) -> Table:
         """
@@ -139,7 +139,7 @@ class OCRDataframe:
                                 pl.col('value').map_elements(lambda x: ' '.join(x), return_dtype=str).alias('value')])
                           .sort([pl.col("row"), pl.col("col"), pl.col('y1'), pl.col('x1')])
                           .group_by(['row', 'col'])
-                          .agg(pl.col('value').map_elements(lambda x: '\n'.join(x).strip(), return_dtype=str).alias('text'))
+                          .agg(pl.col('value').map_elements(lambda x: ' '.join(x).strip(), return_dtype=str).alias('text'))
                           )
 
         # Implement found values to table cells content

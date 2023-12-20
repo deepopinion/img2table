@@ -17,6 +17,7 @@ class Image(Document):
 
     def __post_init__(self):
         self.pages = None
+        self.bboxes = [self.bboxes]
 
         super(Image, self).__post_init__()
 
