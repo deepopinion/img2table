@@ -1,5 +1,9 @@
 # img2table
 
+Notes:
+ - In case you wanna test our DeepOpinion test-cases, use the tests/inttest.py file.
+ - All test cases are simply added to the examples/data/TestCase.odt file (which should be exported as pdf afterwards.)
+
 `img2table` is a simple, easy to use, table identification and extraction Python Library based on [OpenCV](https://opencv.org/) image 
 processing that supports most common image file formats as well as PDF files.
 
