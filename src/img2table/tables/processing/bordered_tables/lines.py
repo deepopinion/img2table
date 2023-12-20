@@ -46,6 +46,35 @@ def threshold_dark_areas(img: np.ndarray, char_length: Optional[float]) -> np.nd
     return thresh
 
 
+def filter_lines(img: np.ndarray, char_length: Optional[float]) -> np.ndarray:
+    """
+    Filter lines after thresholding. With less lines the table detection is more accurate and much faster.
+    :param img: image array
+    :param char_length: average character length
+    :return: threshold image
+    """
+    char_length = char_length or 21
+    
+    # Detect vertical and horizontal lines of min. length
+    size = int(max(15, 2 * char_length))
+    img_cnt = np.zeros(img.shape, dtype=np.uint8)
+    horizontal_kernel = cv2.getStructuringElement(cv2.MORPH_RECT, (size,1))
+    remove_horizontal = cv2.morphologyEx(img, cv2.MORPH_OPEN, horizontal_kernel, iterations=2)
+    cnts = cv2.findContours(remove_horizontal, cv2.RETR_EXTERNAL, cv2.CHAIN_APPROX_SIMPLE)
+    cnts = cnts[0] if len(cnts) == 2 else cnts[1]
+    for c in cnts:
+        cv2.drawContours(img_cnt, [c], -1, (255,255,255), 3)
+    
+    # Now the same for vertical
+    vertical_kernel = cv2.getStructuringElement(cv2.MORPH_RECT, (1, int(size*0.66)))
+    remove_vertical = cv2.morphologyEx(img, cv2.MORPH_OPEN, vertical_kernel, iterations=2)
+    cnts = cv2.findContours(remove_vertical, cv2.RETR_EXTERNAL, cv2.CHAIN_APPROX_SIMPLE)
+    cnts = cnts[0] if len(cnts) == 2 else cnts[1]
+    for c in cnts:
+        cv2.drawContours(img_cnt, [c], -1, (255,255,255), 3)
+
+    return img
+
 def dilate_dotted_lines(thresh: np.ndarray, char_length: float, contours: List[Cell]) -> np.ndarray:
     """
     Dilate specific rows/columns of the threshold image in order to detect dotted rows

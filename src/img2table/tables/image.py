@@ -12,7 +12,7 @@ from img2table.tables.objects.cell import Cell
 from img2table.tables.objects.line import Line
 from img2table.tables.objects.table import Table
 from img2table.tables.processing.bordered_tables.cells import get_cells
-from img2table.tables.processing.bordered_tables.lines import detect_lines, threshold_dark_areas
+from img2table.tables.processing.bordered_tables.lines import detect_lines, threshold_dark_areas, filter_lines
 from img2table.tables.processing.bordered_tables.tables import get_tables
 from img2table.tables.processing.bordered_tables.tables.implicit_rows import handle_implicit_rows
 from img2table.tables.processing.borderless_tables import identify_borderless_tables
@@ -58,8 +58,9 @@ class TableImage:
         :param implicit_rows: boolean indicating if implicit rows are splitted
         :return:
         """
-        # Apply thresholding
+        # Apply thresholding and lines filtering
         self.thresh = threshold_dark_areas(img=self.img, char_length=self.char_length)
+        self.thresh = filter_lines(img=self.thresh, char_length=self.char_length)
 
         # Compute parameters for line detection
         minLinLength = maxLineGap = max(int(round(0.33 * self.median_line_sep)), 1) if self.median_line_sep else 10
