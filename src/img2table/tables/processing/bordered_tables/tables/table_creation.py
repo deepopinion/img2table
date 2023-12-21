@@ -120,9 +120,15 @@ def cluster_to_table(cluster_cells: List[Cell], elements: List[Cell], borderless
                 list_cells.append(containing_cells.pop(0))
             else:
                 # Get x value of closest matching cells
-                x_value = sorted([x_val for cell in matching_cells for x_val in [cell.x1, cell.x2]],
-                                 key=lambda x: min(abs(x - x_left), abs(x - x_right))).pop(0)
-                list_cells.append(Cell(x1=x_value, y1=y_top, x2=x_value, y2=y_bottom))
+                # x_value = sorted([x_val for cell in matching_cells for x_val in [cell.x1, cell.x2]],
+                #                  key=lambda x: min(abs(x - x_left), abs(x - x_right))).pop(0)
+                # list_cells.append(Cell(x1=x_value, y1=y_top, x2=x_value, y2=y_bottom))
+                
+                # Instead of the default heuristic, we assume that the default cell would be the best
+                # match and continue with this one. Seems to work perfect for our cases.
+                # If you want to compare a good and bad case, run test case 9 with the heuristic
+                # commented above and with the default cell...
+                list_cells.append(default_cell)
 
         list_rows.append(Row(cells=list_cells))
 

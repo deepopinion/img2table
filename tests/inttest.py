@@ -23,9 +23,9 @@ if not os.environ.get("GOOGLE_APPLICATION_CREDENTIALS"):
 #
 # Configure path to test cases
 #
-# src = "./examples/data/TestCases.pdf"
+src = "./examples/data/TestCases.pdf"
 # src = "./examples/data/TestCases_1.pdf"
-src = "../table_ocr_test/EggerTable.pdf"
+# src = "../table_ocr_test/Plattendicke.pdf"
 
 
 #
@@ -45,7 +45,7 @@ for page, img in enumerate(imgs):
     doc = Image(img_bytes, bboxes=bboxes[page] if bboxes else None)
     extracted_tables = doc.extract_tables(
         ocr=ocr,
-        borderless_tables=True,
+        borderless_tables=False,
         implicit_rows=False,
         min_confidence=50,
         detect_borderless_headers=False, # Setting this to true should enable detection of TestCase 7
