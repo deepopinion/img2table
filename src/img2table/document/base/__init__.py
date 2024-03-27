@@ -20,20 +20,20 @@ if typing.TYPE_CHECKING:
 @dataclass
 class MockDocument:
     images: List[np.ndarray]
-    bboxes: list | None = None
+    bboxes: Optional[list] = None
 
 
 @dataclass
 class Document(Validations):
     src: Union[str, Path, io.BytesIO, bytes]
-    bboxes: list | None = None
+    bboxes: Optional[list] = None
 
     def validate_src(self, value, **_) -> Union[str, Path, io.BytesIO, bytes]:
         if not isinstance(value, (str, Path, io.BytesIO, bytes)):
             raise TypeError(f"Invalid type {type(value)} for src argument")
         return value
     
-    def validate_bboxes(self, value, **_) -> list | None:
+    def validate_bboxes(self, value, **_) -> Optional[list]:
         if value is not None and not isinstance(value, list):
             raise TypeError(f"Invalid type {type(value)} for bboxes argument")
         return value
